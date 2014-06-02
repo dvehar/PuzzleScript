@@ -213,7 +213,7 @@ function redraw() {
 		//screen might be scrolling. in the future,
 		//only set dirty.all = true when min/max i/j
 		//has changed since last draw.
-		if(flickScreen || zoomScreen) {
+		if(flickscreen || zoomscreen) {
 			dirty.all = true;
 		}
 		
