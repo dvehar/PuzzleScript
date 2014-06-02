@@ -20,7 +20,7 @@
 </head>
 <body>
 
-<div id="leftpanel">
+<div id="lefttophalf">
 <form id="form1" name="form1"  action="javascript:void(0);"><textarea id="code" class="codeform" name="code" rows="20" cols="20" style="display:none;">
 title My Game
 author Stephen Lavelle
@@ -93,6 +93,18 @@ LEVELS
 #########
 </textarea></form>
 </div>
+<div id="lefthorizontaldragbar"></div>
+<div id="leftbottomhalf">
+  <div class="lowertoolbarleft">
+    <div id="rgtsbar">
+      <!-- todo desmond : change the pic link-->
+      &nbsp;<span class="soundbutton"><a id="rgtsbutton0" title="start/stop the rgts" href="javascript:void('Rgts Toggle');"><img src="/home/desmond/Gamelan/puzzle/PuzzleScript_new/rgts/images/rgts_go.gif" alt="start/stop the rgts"></a></span>
+	  </div>
+  </div>
+  <textarea>
+    Hello World!
+	</textarea>
+</div>
 <div id="verticaldragbar"></div>
 
 <div id="uppertoolbar">
@@ -136,29 +148,30 @@ LEVELS
 		<canvas id="gameCanvas" ></canvas>
 	</div>
 </div>
-<div id="horizontaldragbar"></div>
+<div id="righthorizontaldragbar"></div>
 <div id="rightbottomhalf">
 	<div class="lowertoolbar">
-<div id="soundbar">
-	&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="soundbutton"><a id="clearConsoleClick" title="clears the console" href="javascript:void('Clear Console');"><img src="images/clearConsole.gif" alt="clear console contents"></a></span>
-	&nbsp;&nbsp;&nbsp;
-	<span class="soundbutton"><a id="newsound0" title="collect item sound" href="javascript:void('Generate Collect Item Sound');"><img src="images/audio1.gif"  alt="collect item sound"></a></span>
-	<span class="soundbutton"><a  id="newsound7" title="push sounds" href="javascript:void('Generate Push Sound');" ><img src="images/audio2.gif" alt="push sounds"></a></span>
-	<span class="soundbutton"><a id="newsound2" title="explosion sound" href="javascript:void('Generate Explosion Sound');" ><img src="images/audio3.gif" alt="explosion sound"></a></span>
-	<span class="soundbutton"><a id="newsound3" title="powerup sound" href="javascript:void('Generate Power-Up Sound');" ><img src="images/audio4.gif" alt="powerup sound"></a></span>
-	<span class="soundbutton"><a id="newsound9" title="bird tweet sound" href="javascript:void('Generate Bird Tweet Sound');"><img src="images/audio5.gif"  alt="bird tweet sound"></a></span>
-	<span class="soundbutton"><a id="newsound4" title="hurt sound" href="javascript:void('Generate Hurt Sound');" ><img src="images/audio6.gif" alt="hurt sound"></a></span>
-	<span class="soundbutton"><a id="newsound5" title="jump sound" href="javascript:void('Generate Jump Sound');"><img src="images/audio7.gif"  alt="jump sound"></a></span>
-	<span class="soundbutton"><a id="newsound1" title="pew pew sound" href="javascript:void('Generate Pew Pew Sound');"><img src="images/audio8.gif"  alt="pew pew pew"></a></span>
-	<span class="soundbutton"><a id="newsound6" title="selection sound" href="javascript:void('Generate Selection Sound');"><img src="images/audio9.gif"  alt="selection sound"></a></span>
-	<span class="soundbutton"><a id="newsound8" title="random sound" href="javascript:void('Generate Random Sound');"><img src="images/audio10.gif"  alt="random sound"></a></span>
-	</div></div>
+    <div id="soundbar">
+      &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="soundbutton"><a id="clearConsoleClick" title="clears the console" href="javascript:void('Clear Console');"><img src="images/clearConsole.gif" alt="clear console contents"></a></span>
+      &nbsp;&nbsp;&nbsp;
+      <span class="soundbutton"><a id="newsound0" title="collect item sound" href="javascript:void('Generate Collect Item Sound');"><img src="images/audio1.gif"  alt="collect item sound"></a></span>
+      <span class="soundbutton"><a  id="newsound7" title="push sounds" href="javascript:void('Generate Push Sound');" ><img src="images/audio2.gif" alt="push sounds"></a></span>
+      <span class="soundbutton"><a id="newsound2" title="explosion sound" href="javascript:void('Generate Explosion Sound');" ><img src="images/audio3.gif" alt="explosion sound"></a></span>
+      <span class="soundbutton"><a id="newsound3" title="powerup sound" href="javascript:void('Generate Power-Up Sound');" ><img src="images/audio4.gif" alt="powerup sound"></a></span>
+      <span class="soundbutton"><a id="newsound9" title="bird tweet sound" href="javascript:void('Generate Bird Tweet Sound');"><img src="images/audio5.gif"  alt="bird tweet sound"></a></span>
+      <span class="soundbutton"><a id="newsound4" title="hurt sound" href="javascript:void('Generate Hurt Sound');" ><img src="images/audio6.gif" alt="hurt sound"></a></span>
+      <span class="soundbutton"><a id="newsound5" title="jump sound" href="javascript:void('Generate Jump Sound');"><img src="images/audio7.gif"  alt="jump sound"></a></span>
+      <span class="soundbutton"><a id="newsound1" title="pew pew sound" href="javascript:void('Generate Pew Pew Sound');"><img src="images/audio8.gif"  alt="pew pew pew"></a></span>
+      <span class="soundbutton"><a id="newsound6" title="selection sound" href="javascript:void('Generate Selection Sound');"><img src="images/audio9.gif"  alt="selection sound"></a></span>
+      <span class="soundbutton"><a id="newsound8" title="random sound" href="javascript:void('Generate Random Sound');"><img src="images/audio10.gif"  alt="random sound"></a></span>
+	  </div>
+  </div>
 	<div class="lowerarea" id="lowerarea">
-<div id = "consoletextarea" >
-=================================<br>
-&nbsp;&nbsp;&nbsp;PuzzleScript Log V1.4<br>
-=================================<br>
-</div>
+    <div id = "consoletextarea" >
+      =================================<br>
+      &nbsp;&nbsp;&nbsp;PuzzleScript Log V1.4<br>
+      =================================<br>
+    </div>
 	</div>
 </div>
 
@@ -200,6 +213,7 @@ LEVELS
 <script src="js/addlisteners.js"></script>
 <script src="js/addlisteners_editor.js"></script>
 <script src="js/makegif.js"></script>
+<script src="js/rgts_worker.js"></script>
 
 <!--ENDREPLACE-->
 

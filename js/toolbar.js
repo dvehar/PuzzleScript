@@ -67,8 +67,6 @@ function saveClick() {
 	consolePrint("saved file to local storage",true);
 }
 
-
-
 function loadDropDownChange() {
 	var saveString = localStorage['saves'];
 	if (saveString===undefined) {

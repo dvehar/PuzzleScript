@@ -1,34 +1,52 @@
 var soundbarwidth = 100;
-var lowerbarheight = document.getElementById("soundbar").clientHeight;
+var leftlowerbarheight = document.getElementById("rgtsbar").clientHeight;
+var rightlowerbarheight = document.getElementById("soundbar").clientHeight;
 var upperbarheight = document.getElementById("uppertoolbar").clientHeight;
 var winwidth = window.innerWidth;
 var winheight = window.innerHeight;
 var verticaldragbarWidth = document.getElementById("verticaldragbar").clientWidth;
-var horizontaldragbarHeight = document.getElementById("horizontaldragbar").clientHeight;
+var leftHorizontaldragbarHeight = document.getElementById("lefthorizontaldragbar").clientHeight;
+var rightHorizontaldragbarHeight = document.getElementById("righthorizontaldragbar").clientHeight;
 var minimumDimension = 100;
 
 function resize_widths(verticaldragbarX){
-	document.getElementById("leftpanel").style.width = verticaldragbarX + "px";
-	document.getElementById("righttophalf").style.left = verticaldragbarX + verticaldragbarWidth + "px";
-	document.getElementById("rightbottomhalf").style.left = verticaldragbarX + verticaldragbarWidth + "px";
-	document.getElementById("horizontaldragbar").style.left = verticaldragbarX + verticaldragbarWidth + "px";
-	document.getElementById("verticaldragbar").style.left = verticaldragbarX + "px";
+  var left_pannel_x = verticaldragbarX + "px";
+  var right_pannel_x = verticaldragbarX + verticaldragbarWidth + "px";
+  var vertical_dragbar_x = verticaldragbarX + "px";
+  
+	document.getElementById("lefttophalf").style.width = left_pannel_x;
+  document.getElementById("lefthorizontaldragbar").style.width = left_pannel_x;
+  document.getElementById("leftbottomhalf").style.width = left_pannel_x;
+  
+	document.getElementById("righttophalf").style.left = right_pannel_x;
+	document.getElementById("rightbottomhalf").style.left = right_pannel_x;
+	document.getElementById("righthorizontaldragbar").style.left = right_pannel_x;
+  
+	document.getElementById("verticaldragbar").style.left = vertical_dragbar_x;
 	canvasResize();
 }
 
-function resize_heights(horizontaldragbarY){
-	document.getElementById("leftpanel").style.height = (window.innerHeight - upperbarheight) + "px";
-	document.getElementById("verticaldragbar").style.height = (window.innerHeight - upperbarheight) + "px";
+function resize_heights(lefthorizontaldragbarY, righthorizontaldragbarY){
+  if (lefthorizontaldragbarY !== null) {
+    document.getElementById("lefttophalf").style.height = lefthorizontaldragbarY - upperbarheight + "px";
+    document.getElementById("leftbottomhalf").style.top = lefthorizontaldragbarY + leftHorizontaldragbarHeight + "px";
+    document.getElementById("lefthorizontaldragbar").style.top = lefthorizontaldragbarY + "px";
+  }
+  
+	document.getElementById("verticaldragbar").style.height = (window.innerHeight - upperbarheight) + "px";/*lefthorizontaldragbarY - upperbarheight + "px";*/
 	
-	document.getElementById("righttophalf").style.height = horizontaldragbarY - upperbarheight + "px";
-	document.getElementById("rightbottomhalf").style.top = horizontaldragbarY + horizontaldragbarHeight + "px";
-	document.getElementById("horizontaldragbar").style.top = horizontaldragbarY + "px";
+  if (righthorizontaldragbarY !== null) {
+    document.getElementById("righttophalf").style.height = righthorizontaldragbarY - upperbarheight + "px";
+    document.getElementById("rightbottomhalf").style.top = righthorizontaldragbarY + rightHorizontaldragbarHeight + "px";
+    document.getElementById("righthorizontaldragbar").style.top = righthorizontaldragbarY + "px";
+  }
 	canvasResize();
 }
 
 function resize_all(e){
 	smallmovelimit = 100;
 	
+  /* vertical dragebar */
 	hdiff = window.innerWidth - winwidth;
 	verticaldragbarX = parseInt(document.getElementById("verticaldragbar").style.left.replace("px",""));
 	
@@ -46,22 +64,40 @@ function resize_all(e){
 	resize_widths(verticaldragbarX);
 	
 	
+	/* right horozontal drag bar */
+	righthorizontaldragbarY = parseInt(document.getElementById("righthorizontaldragbar").style.top.replace("px",""));
+	rightvdiff = window.innerHeight - winheight;
 	
-	horizontaldragbarY = parseInt(document.getElementById("horizontaldragbar").style.top.replace("px",""));
-	vdiff = window.innerHeight - winheight;
-	
-	if(vdiff > -smallmovelimit && vdiff < smallmovelimit){
-		horizontaldragbarY += vdiff;
+	if(rightvdiff > -smallmovelimit && rightvdiff < smallmovelimit){
+		righthorizontaldragbarY += rightvdiff;
 	} else {
-		horizontaldragbarY *= window.innerHeight/winheight;
+		righthorizontaldragbarY *= window.innerHeight/winheight;
 	};
 	
-	if ((horizontaldragbarY <= upperbarheight + minimumDimension)){
-		horizontaldragbarY = upperbarheight + minimumDimension;
-	} else if ((window.innerHeight - horizontaldragbarY) < (lowerbarheight + minimumDimension)){
-		horizontaldragbarY = window.innerHeight - (lowerbarheight + minimumDimension + 5);
+	if ((righthorizontaldragbarY <= upperbarheight + minimumDimension)){
+		righthorizontaldragbarY = upperbarheight + minimumDimension;
+	} else if ((window.innerHeight - righthorizontaldragbarY) < (rightlowerbarheight + minimumDimension)){
+		righthorizontaldragbarY = window.innerHeight - (rightlowerbarheight + minimumDimension + 5);
 	};
-	resize_heights(horizontaldragbarY);
+  
+  
+  /* left horizontal drag bar */
+  lefthorizontaldragbarY = parseInt(document.getElementById("lefthorizontaldragbar").style.top.replace("px",""));
+	leftvdiff = window.innerHeight - winheight;
+	
+	if(leftvdiff > -smallmovelimit && leftvdiff < smallmovelimit){
+		lefthorizontaldragbarY += leftvdiff;
+	} else {
+		lefthorizontaldragbarY *= window.innerHeight/winheight;
+	};
+	
+	if ((lefthorizontaldragbarY <= upperbarheight + minimumDimension)){
+		lefthorizontaldragbarY = upperbarheight + minimumDimension;
+	} else if ((window.innerHeight - lefthorizontaldragbarY) < leftlowerbarheight + minimumDimension){
+		lefthorizontaldragbarY = window.innerHeight - (leftlowerbarheight + minimumDimension + 5);
+	};
+  
+	resize_heights(lefthorizontaldragbarY , righthorizontaldragbarY); 
 	
 	winwidth = window.innerWidth;
 	winheight = window.innerHeight;
@@ -89,31 +125,55 @@ function verticalDragbarMouseUp(e) {
 	window.removeEventListener("mousemove", verticalDragbarMouseMove, false);
 };
 
-function horizontalDragbarMouseDown(e) {
+function leftHorizontalDragbarMouseDown(e) {
 	e.preventDefault();
 	document.body.style.cursor = "row-resize";
-	window.addEventListener("mousemove", horizontalDragbarMouseMove, false);
-	window.addEventListener("mouseup", horizontalDragbarMouseUp, false);
+	window.addEventListener("mousemove", leftHorizontalDragbarMouseMove, false);
+	window.addEventListener("mouseup", leftHorizontalDragbarMouseUp, false);
 };
 
-function horizontalDragbarMouseMove(e) {
+function leftHorizontalDragbarMouseMove(e) {  
+  console.log("Hey1");
 	if (e.pageY <= (upperbarheight + minimumDimension)) {
-		resize_heights(upperbarheight + minimumDimension);
-	} else if ((window.innerHeight - e.pageY) > (lowerbarheight + minimumDimension)){
-		resize_heights(e.pageY - 1);
+		resize_heights(upperbarheight + minimumDimension, null);
+	} else if ((window.innerHeight - e.pageY) > (leftlowerbarheight + minimumDimension)){
+		resize_heights(e.pageY - 1, null);
 	} else {
-		resize_heights(window.innerHeight - lowerbarheight - minimumDimension);
+		resize_heights(window.innerHeight - leftlowerbarheight - minimumDimension, null);
 	}
 };
 
-function horizontalDragbarMouseUp(e) {
+function leftHorizontalDragbarMouseUp(e) {
 	document.body.style.cursor = "";
-	window.removeEventListener("mousemove", horizontalDragbarMouseMove, false);
+	window.removeEventListener("mousemove", leftHorizontalDragbarMouseMove, false);
+};
+
+function rightHorizontalDragbarMouseDown(e) {
+	e.preventDefault();
+	document.body.style.cursor = "row-resize";
+	window.addEventListener("mousemove", rightHorizontalDragbarMouseMove, false);
+	window.addEventListener("mouseup", rightHorizontalDragbarMouseUp, false);
+};
+
+function rightHorizontalDragbarMouseMove(e) {
+	if (e.pageY <= (upperbarheight + minimumDimension)) {
+		resize_heights(null, upperbarheight + minimumDimension);
+	} else if ((window.innerHeight - e.pageY) > (rightlowerbarheight + minimumDimension)){
+		resize_heights(null, e.pageY - 1);
+	} else {
+		resize_heights(null, window.innerHeight - rightlowerbarheight - minimumDimension);
+	}
+};
+
+function rightHorizontalDragbarMouseUp(e) {
+	document.body.style.cursor = "";
+	window.removeEventListener("mousemove", rightHorizontalDragbarMouseMove, false);
 };
 
 function reset_panels(){
 	resize_widths(Math.floor(window.innerWidth/2));
-	resize_heights(Math.floor(window.innerHeight/2));
+  console.log("hey2");
+  resize_heights(Math.floor(window.innerHeight/2), Math.floor(window.innerHeight/2));
 	winwidth = window.innerWidth;
 	winheight = window.innerHeight;
 };

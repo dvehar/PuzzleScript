@@ -1,8 +1,48 @@
-
+/* setup callback for click on sound buttons */
 for (var i=0;i<10;i++) {
 	var idname = "newsound"+i;
 	var el = document.getElementById(idname);
-    el.addEventListener("click", (function(n){return function(){return newSound(n);};})(i), false);
+  el.addEventListener("click", (function(n){return function(){return newSound(n);};})(i), false);
+}
+
+/* var for the rgts webworker */ 
+var worker = null;
+/* setup callback for click on rgts buttons */
+for (var i=0;i<1;i++) {
+	var idname = "rgtsbutton"+i;
+	var el = document.getElementById(idname);
+  
+  if (i === 0) { // the start / stop toggle button
+    /* TODO change the file path and/or how this is detected. */
+    /* if turned on we start the worker 
+     * if turned of we terminate the worker and then restart and redraw the level*/
+    el.addEventListener("click", (function(n){return function(){ 
+        if (el.firstChild.attributes[1].nodeValue === "/home/desmond/Gamelan/puzzle/PuzzleScript_new/rgts/images/rgts_go.gif") {
+          console.log("starting the rgts");
+          
+          worker = new Worker('js/rgts_worker.js');
+          // setup the message receiver
+          worker.addEventListener('message', function(e) {
+            console.log(e.data);
+            if (e === "restart and redraw") {
+              DoRestart(true);
+              redraw();
+            } else {
+              
+            }
+          }, false);
+          worker.postMessage({'cmd': 'start', 'msg': editor.getValue()}); // send a message telling the worker to start
+          el.firstChild.attributes[1].nodeValue = "/home/desmond/Gamelan/puzzle/PuzzleScript_new/rgts/images/rgts_stop.gif" 
+        } else {
+          console.log("stopping the rgts");
+          worker.terminate(); // stop the worker
+          DoRestart(true);
+          redraw();
+          el.firstChild.attributes[1].nodeValue = "/home/desmond/Gamelan/puzzle/PuzzleScript_new/rgts/images/rgts_go.gif";
+        } };})(i), false);
+  } else { // TODO remove ?
+    el.addEventListener("click", (function(n){return function(){console.log("rgts_button" + n + " was pressed.");};})(i), false);
+  }
 }
 
 //var soundButtonPress = document.getElementById("soundButtonPress");
@@ -32,8 +72,11 @@ exampleDropdown.addEventListener("change", dropdownChange, false);
 var loadDropDown = document.getElementById("loadDropDown");
 loadDropDown.addEventListener("change", loadDropDownChange, false);
 
-var horizontalDragbar = document.getElementById("horizontaldragbar");
-horizontalDragbar.addEventListener("mousedown", horizontalDragbarMouseDown, false);
+var leftHorizontalDragbar = document.getElementById("lefthorizontaldragbar");
+leftHorizontalDragbar.addEventListener("mousedown", leftHorizontalDragbarMouseDown, false);
+
+var rightHorizontalDragbar = document.getElementById("righthorizontaldragbar");
+rightHorizontalDragbar.addEventListener("mousedown", rightHorizontalDragbarMouseDown, false);
 
 var verticalDragbar = document.getElementById("verticaldragbar");
 verticalDragbar.addEventListener("mousedown", verticalDragbarMouseDown, false);

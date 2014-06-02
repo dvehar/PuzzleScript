@@ -6,15 +6,23 @@ HTML, BODY
 	top: 0px;
 	left: 0px;
 }
-#leftpanel
+#lefttophalf
 {
 	position:absolute;
 	left: 0;
 	top: 30px;
-	bottom: 0;
+	bottom: 50%;
 	width: 50%;
-	height: 100%;
 	float: left;
+}
+#leftbottomhalf
+{
+	position: absolute;
+	left: 0;
+  top: 50% + 3px;
+	float: left;
+  width: 50%;
+	bottom: 0;
 }
 #righttophalf
 {
@@ -61,6 +69,16 @@ HTML, BODY
 	padding-top:1px;
 	background-color:#444444;
 }
+.lowertoolbarleft
+{
+	display: block;
+	left: 2px;
+	right: 0px;
+	height: 20px;
+
+	padding-top:1px;
+	background-color:#444444;
+}
 .lowerarea
 {
 	color: #808080;
@@ -73,6 +91,16 @@ HTML, BODY
 	overflow: auto;
 	word-wrap: normal;
 }
+#lefthorizontaldragbar {
+	position: absolute;
+	background-color:#555555;
+	top: 50%;
+	left: 0;
+  right: 50%;
+	float: left;
+	height: 3px;
+	cursor: row-resize;
+}
 #verticaldragbar {
 	position: absolute;
 	top: 30px;
@@ -83,7 +111,7 @@ HTML, BODY
 	width: 3px;
 	cursor: col-resize;
 }
-#horizontaldragbar {
+#righthorizontaldragbar {
 	position: absolute;
 	background-color:#555555;
 	top: 50%;
