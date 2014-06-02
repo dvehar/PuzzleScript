@@ -472,10 +472,6 @@ var backups=[];
 var restartTarget;
 
 function backupLevel() {
-	self.postMessage("h");
-  self.postMessage(level == null);
-  self.postMessage(level);
-  self.postMessage(level.objects);
   var ret = {
 		dat : new Int32Array(level.objects),
 		width : level.width,

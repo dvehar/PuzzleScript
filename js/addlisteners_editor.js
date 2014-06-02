@@ -17,7 +17,7 @@ for (var i=0;i<1;i++) {
     /* if turned on we start the worker 
      * if turned of we terminate the worker and then restart and redraw the level*/
     el.addEventListener("click", (function(n){return function(){ 
-        if (el.firstChild.attributes[1].nodeValue === "/home/desmond/Gamelan/puzzle/PuzzleScript_new/rgts/images/rgts_go.gif") {
+        // if (el.firstChild.attributes[1].nodeValue === "/home/desmond/Gamelan/puzzle/PuzzleScript_new/rgts/images/rgts_go.gif") {
           console.log("starting the rgts");
           
           worker = new Worker('js/rgts_worker.js');
@@ -33,13 +33,14 @@ for (var i=0;i<1;i++) {
           }, false);
           worker.postMessage({'cmd': 'start', 'msg': editor.getValue()}); // send a message telling the worker to start
           el.firstChild.attributes[1].nodeValue = "/home/desmond/Gamelan/puzzle/PuzzleScript_new/rgts/images/rgts_stop.gif" 
-        } else {
-          console.log("stopping the rgts");
-          worker.terminate(); // stop the worker
-          DoRestart(true);
-          redraw();
-          el.firstChild.attributes[1].nodeValue = "/home/desmond/Gamelan/puzzle/PuzzleScript_new/rgts/images/rgts_go.gif";
-        } };})(i), false);
+        // } else {
+        //   console.log("stopping the rgts");
+        //   worker.terminate(); // stop the worker
+        //   DoRestart(true);
+        //   redraw();
+        //   el.firstChild.attributes[1].nodeValue = "/home/desmond/Gamelan/puzzle/PuzzleScript_new/rgts/images/rgts_go.gif";
+      //  } 
+			};})(i), false);
   } else { // TODO remove ?
     el.addEventListener("click", (function(n){return function(){console.log("rgts_button" + n + " was pressed.");};})(i), false);
   }

@@ -36,6 +36,10 @@ var max_depth = 1; // very deep
 var wildcard = "";
 var legend = ""; // todo remove ? 
 
+function logMessage(m) {
+	postMessage("MSG:"+m);
+}
+
 // will push all query state variables on a stack in order then return the stack
 // only pushes the values for queries that are turned on
 function queryBackup () {
@@ -92,7 +96,7 @@ function dls(depth, movesMade, stack) {
     if (query_winnable_through_state_idx < query_winnable_through_state_queue.length) {
       var curr_idx = query_winnable_through_state_idx;
       var curr_state_in_queue = query_winnable_through_state_queue[curr_idx];
-      if(curr_state_in_queue === JSON.stringify(level.dat)) {
+      if(curr_state_in_queue === JSON.stringify(level)) {
         ++query_winnable_through_state_idx;
       }
     }
@@ -102,7 +106,7 @@ function dls(depth, movesMade, stack) {
     if (query_not_winnable_through_state_idx < query_not_winnable_through_state_queue.length) {
       var curr_idx = query_not_winnable_through_state_idx;
       var curr_state_in_queue = query_not_winnable_through_state_queue[curr_idx];
-      if(curr_state_in_queue === JSON.stringify(level.dat)) {
+      if(curr_state_in_queue === JSON.stringify(level)) {
         ++query_not_winnable_through_state_idx;
       }
     }
@@ -110,7 +114,7 @@ function dls(depth, movesMade, stack) {
   
   if (check_query_visits) { // q4
     if (query_visits_idx < query_visits_states.length) {
-      if (query_visits_states[query_visits_idx] === JSON.stringify(level.dat)) {
+      if (query_visits_states[query_visits_idx] === JSON.stringify(level)) {
         ++query_visits_idx;
       }
     }
@@ -119,7 +123,7 @@ function dls(depth, movesMade, stack) {
   // check_query_from_state_dont (query 5) is updated when movements are made
   
   if (check_query_visit_no_return) { // q6
-    if (JSON.stringify(level.dat) === query_visit_no_return_state) {
+    if (JSON.stringify(level) === query_visit_no_return_state) {
       if (query_visit_no_return_visited) {
         query_visit_no_return_returned = true;
       } else {
@@ -131,7 +135,7 @@ function dls(depth, movesMade, stack) {
   
   // update the engine for wins and try dumping a trace
   if (winning) {
-    //console.log("I won");
+    logMessage("I won");
     // set the winnable query flag to true and try dumping the trace
     query_winnable = true;
     outputTrace(stack);
@@ -147,10 +151,11 @@ function dls(depth, movesMade, stack) {
   } else {
     outputTrace(stack);
   }
-  
+  logMessage("try")
   // search further and update the #5 query (from_state_dont)
   if (depth > 0) {
-    var curr_state = JSON.stringify(level.dat);     
+    var curr_state = JSON.stringify(level);    
+		logMessage("CS:"+JSON.stringify(level)) 
     var query_state = queryBackup();
     
     // try moving up
@@ -158,14 +163,15 @@ function dls(depth, movesMade, stack) {
     while (againing) {
       processInput(-1);			
     }
-    var new_state = JSON.stringify(level.dat);
+		logMessage("CS2:"+JSON.stringify(level)) 
+    var new_state = JSON.stringify(level);
     if (new_state === curr_state) {
-//    console.log("nothing happened when moving up.");  
+   logMessage("nothing happened when moving up.");  
     } else {
       stack.push("up");
       pushInput(0);
-//    console.log(curr_state);
-//    console.log(new_state);
+//    logMessage(curr_state);
+//    logMessage(new_state);
       if (check_query_from_state_dont) {
         if (query_from_state_dont_state === curr_state) {
           if (query_from_state_dont_move.indexOf("up") != -1) { // is up not an expected move?
@@ -182,14 +188,14 @@ function dls(depth, movesMade, stack) {
     while (againing) {
       processInput(-1);			
     }
-    new_state = JSON.stringify(level.dat);
+    new_state = JSON.stringify(level);
     if (new_state === curr_state) {
-//    console.log("nothing happened when moving left.");  
+   logMessage("nothing happened when moving left.");  
     } else {
       stack.push("left");
       pushInput(1);
-      console.log(curr_state);
-      console.log(new_state);
+      logMessage(curr_state);
+      logMessage(new_state);
       if (check_query_from_state_dont) {
         if (query_from_state_dont_state === curr_state) {
           if (query_from_state_dont_move.indexOf("left") != -1) { // is up not an expected move?
@@ -206,14 +212,14 @@ function dls(depth, movesMade, stack) {
     while (againing) {
       processInput(-1);			
     }
-    new_state = JSON.stringify(level.dat);
+    new_state = JSON.stringify(level);
     if (new_state === curr_state) {
-//    console.log("nothing happened when moving down.");  
+   logMessage("nothing happened when moving down.");  
     } else {
       stack.push("down");
       pushInput(2);
-      console.log(curr_state);
-      console.log(new_state);
+      logMessage(curr_state);
+      logMessage(new_state);
       if (check_query_from_state_dont) {
         if (query_from_state_dont_state === curr_state) {
           if (query_from_state_dont_move.indexOf("down") != -1) { // is up not an expected move?
@@ -230,14 +236,14 @@ function dls(depth, movesMade, stack) {
     while (againing) {
       processInput(-1);			
     }
-    new_state = JSON.stringify(level.dat);
+    new_state = JSON.stringify(level);
     if (new_state === curr_state) {
-//    console.log("nothing happened when moving right.");  
+   logMessage("nothing happened when moving right.");  
     } else {
       stack.push("right");
       pushInput(3);
-      console.log(curr_state);
-      console.log(new_state);
+      logMessage(curr_state);
+      logMessage(new_state);
       if (check_query_from_state_dont) {
         if (query_from_state_dont_state === curr_state) {
           if (query_from_state_dont_move.indexOf("right") != -1) { // is up not an expected move?
@@ -254,14 +260,14 @@ function dls(depth, movesMade, stack) {
     while (againing) {
       processInput(-1);			
     }
-    new_state = JSON.stringify(level.dat);
+    new_state = JSON.stringify(level);
     if (new_state === curr_state) {
-//    console.log("nothing happened when making an action.");  
+//    logMessage("nothing happened when making an action.");  
     } else {
       stack.push("action");
       pushInput(4);
-      console.log(curr_state);
-      console.log(new_state);
+      logMessage(curr_state);
+      logMessage(new_state);
       if (check_query_from_state_dont) {
         if (query_from_state_dont_state === curr_state) {
           if (query_from_state_dont_move.indexOf("action") != -1) { // is up not an expected move?
@@ -290,7 +296,7 @@ function dls(depth, movesMade, stack) {
     }  
   } else if (movesMade) {
     //outputTrace(stack);
-    //console.log(JSON.stringify(level.dat));
+    logMessage(JSON.stringify(level));
   }
   inputHistory.pop();
   stack.pop();
@@ -359,17 +365,17 @@ function passes_queries() {
 // get the the rgts and puzzlescript ready for searching the state space
 function rgts_init (puzzle_src) {
   /* load the scripts needed */
-  importScripts('/home/desmond/Gamelan/puzzle/PuzzleScript_new/PuzzleScript/tests/resources/wrapper_rgts.js', 
+  importScripts('wrapper_rgts.js', 
                 'globalVariables.js', 'debug.js', 'font.js', 'rng.js',
                 'riffwave.js', 'sfxr.js', 'codemirror/codemirror_rgts.js', 
                 'codemirror/active-line.js', 'colors.js', 'engine_rgts.js',
                 'parser_rgts.js', 'compiler_rgts.js', 'soundbar.js');
-  
+  verbose_logging = true;
   /* set Puzzlescript to unit testing mode */
   unitTesting=true;
   
   /* compile the source */
-  compile(["loadLevel",0],puzzle_src,null);
+  compile(["loadLevel",1],puzzle_src,null);
   
   self.postMessage(JSON.stringify(level)); 
   
@@ -445,9 +451,9 @@ function setUpQueries() {
 
   // set up the legend
   for (var i=0; i < state.legend_synonyms.length; ++i) {
-  	//console.log(state.legend_synonyms[i][0] + " " + wildcard + (state.legend_synonyms[i][0] === wildcard) + " " + (state.legend_synonyms[i][0] == wildcard));
+  	logMessage(state.legend_synonyms[i][0] + " " + wildcard + (state.legend_synonyms[i][0] === wildcard) + " " + (state.legend_synonyms[i][0] == wildcard));
     if (state.legend_synonyms[i][0] === wildcard) {
-      console.log(qfile + ": " + linenr + ": Wildcard, " + wildcard + ", is already in use.");
+      logMessage(qfile + ": " + linenr + ": Wildcard, " + wildcard + ", is already in use.");
       process.exit(1);
     }
     legend += state.legend_synonyms[i][0];
@@ -457,8 +463,8 @@ function setUpQueries() {
   var legend_converter = [];
   for(var property in state.objectMasks) {
     if (state.objectMasks.hasOwnProperty(property) && property.length == 1) { 
-      console.log(property);
-      //console.log(state.objectMasks[property]);
+      logMessage(property);
+      logMessage(state.objectMasks[property]);
       //legend_converter[property] = state.objectMasks[property].data[0];
       var val = state.objectMasks[property];
       legend_converter[property] = (val === 1)? 1:(val+1);
@@ -470,11 +476,11 @@ function setUpQueries() {
     var ary = line.split(" ");
     if (current_query === -1) {
       if (ary.length < 1) {
-        console.log(qfile + ": " + linenr + ": Expecting a query header");
+        logMessage(qfile + ": " + linenr + ": Expecting a query header");
         process.exit(1);
       } else {
         current_query = getQueryHeader(ary[0]);
-                    console.log(ary[0] + " -> current query = " + current_query); 
+                    logMessage(ary[0] + " -> current query = " + current_query); 
         load_states = true; // asume by default
         switch (current_query) {
         case 1:
@@ -485,12 +491,12 @@ function setUpQueries() {
         case 2:
           check_query_winnable_through = true;
           if (ary.length !== 3) {
-            console.log(qfile + ": " + linenr + ": Invalid length for query");
+            logMessage(qfile + ": " + linenr + ": Invalid length for query");
             process.exit(1);
           }
           states_left = parseInt(ary[1], 10);
           if (states_left < 1) {
-            console.log(qfile + ": " + linenr + ": Need atleast 1 state");
+            logMessage(qfile + ": " + linenr + ": Need atleast 1 state");
             process.exit(1);
           }
           ary_ref = query_winnable_through_state_queue;
@@ -498,12 +504,12 @@ function setUpQueries() {
         case 3:
           check_query_not_winnable_through = true;
           if (ary.length !== 3) {
-            console.log(qfile + ": " + linenr + ": Invalid length for query");
+            logMessage(qfile + ": " + linenr + ": Invalid length for query");
             process.exit(1);
           }
           states_left = parseInt(ary[1], 10);
           if (states_left < 1) {
-            console.log(qfile + ": " + linenr + ": Need atleast 1 state");
+            logMessage(qfile + ": " + linenr + ": Need atleast 1 state");
             process.exit(1);
           }
           ary_ref = query_not_winnable_through_state_queue;
@@ -511,25 +517,25 @@ function setUpQueries() {
         case 4:
           check_query_visits = true;
           if (ary.length !== 2) {
-            console.log(qfile + ": " + linenr + ": Invalid length for query");
+            logMessage(qfile + ": " + linenr + ": Invalid length for query");
             process.exit(1);
           }
           states_left = parseInt(ary[1], 10);
           if (states_left < 1) {
-            console.log(qfile + ": " + linenr + ": Need atleast 1 state");
+            logMessage(qfile + ": " + linenr + ": Need atleast 1 state");
             process.exit(1);
           }
           ary_ref = query_visits_states;
           break;
         case 5:
           if (ary.length !== 2) {
-            console.log(qfile + ": " + linenr + ": Invalid length for query");
+            logMessage(qfile + ": " + linenr + ": Invalid length for query");
             process.exit(1);
           }
           for (var i=1; i < ary.length; ++i) {
             var move = valid_moves.indexOf(ary[1]);
             if (move === -1) {
-              console.log(filename + ": " + linenr + ": invalid move: " + ary[1]);
+              logMessage(filename + ": " + linenr + ": invalid move: " + ary[1]);
               process.exit(1);
             } 
             query_from_state_dont_move.push(move);
@@ -540,7 +546,7 @@ function setUpQueries() {
           check_query_visit_no_return = true;
           break;
         default:
-          console.log(qfile + ": " + linenr + ": Invalid query header");
+          logMessage(qfile + ": " + linenr + ": Invalid query header");
           process.exit(1);
           //expecting = -1;
           load_states = false;
@@ -551,7 +557,7 @@ function setUpQueries() {
       if (width === -1) {
         width = line.length;
         if (width === 0) {
-          console.log(filename + ": " + linenr + ": expecting 1st line of level");
+          logMessage(filename + ": " + linenr + ": expecting 1st line of level");
           process.exit(1);
         }
         
@@ -561,18 +567,18 @@ function setUpQueries() {
         
         for (var i=0; i < line.length; ++i) { 
           if (legend.indexOf(line[i]) == -1) {
-            console.log(filename + ": " + linenr + ": invalid symbol: " + line[i]);
+            logMessage(filename + ": " + linenr + ": invalid symbol: " + line[i]);
             process.exit(1);
           }
           tmp_ary[i].push(line[i]);// transpose it
         }
-        //console.log("pushing: " + line);
+        logMessage("pushing: " + line);
       } else if (line === "") { // empty line
         --states_left;
         // flatten tmp_ary
         var tmp = [];
         for (var i=0; i < tmp_ary.length; ++i) {
-          console.log(linenr + " $ " + tmp_ary[i]);
+          logMessage(linenr + " $ " + tmp_ary[i]);
           for (var j=0; j < tmp_ary[i].length; ++j) {
             //tmp.push(tmp_ary[i][j]);
             tmp.push(legend_converter[tmp_ary[i][j]]);
@@ -582,43 +588,43 @@ function setUpQueries() {
         width = -1;
         // store into the query queue
         ary_ref.push(tmp);
-        console.log(JSON.stringify(tmp));
-        //console.log(">>>>>>>>>>>>>>>>>>");
+        logMessage(JSON.stringify(tmp));
+        logMessage(">>>>>>>>>>>>>>>>>>");
         //var p = [];
         //for (var qq=0; qq<180; ++qq)
         //  p.push(qq);
-        //console.log(p);  
-        //console.log(tmp.length);
-        //console.log(tmp);
-        //console.log(">>>>>>>>>>>>>>>>>>");
+        logMessage(p);  
+        logMessage(tmp.length);
+        logMessage(tmp);
+        logMessage(">>>>>>>>>>>>>>>>>>");
         if (states_left === 0) {
           load_states = false;
           ary_ref = null;
-          //console.log("$$$$$$$$$$$$$$$$$$");
-          //console.log(query_visits_states);
-          //console.log("$$$$$$$$$$$$$$$$$$");
+          logMessage("$$$$$$$$$$$$$$$$$$");
+          logMessage(query_visits_states);
+          logMessage("$$$$$$$$$$$$$$$$$$");
         }  
       } else if (line.length !== width) {
-        console.log(qfile + ": " + linenr + ": invalid width");
+        logMessage(qfile + ": " + linenr + ": invalid width");
         process.exit(1);
       } else {
         for (var i=0; i < line.length; ++i) { 
           if (legend.indexOf(line[i]) == -1) {
-            console.log(legend);
-            console.log(qfile + ": " + linenr + ": invalid symbol: " + line[i]);
+            logMessage(legend);
+            logMessage(qfile + ": " + linenr + ": invalid symbol: " + line[i]);
             process.exit(1);
           }
           tmp_ary[i].push(line[i]);// transpose it
         }
-        //console.log("pushing: " + line);
+        logMessage("pushing: " + line);
       }
     } else {
       current_query = -1; 
     }
   });
   rl.on('close', function() {
-    console.log("queries initilized");
-    //console.log(JSON.stringify(level.dat));
+    logMessage("queries initilized");
+    logMessage(JSON.stringify(level));
   });
 }
 */
@@ -631,10 +637,11 @@ self.addEventListener('message', function(e) {
       for (var i=0; i < 5; ++i) {
         self.postMessage("test message: " + i);
       }
-      //console.log("Starting the search");
+      logMessage("Starting the search");
       rgts_init(data.msg);
       //dls(max_depth,false,[]);
       dls(4,false,[]); // TODO Desmond Change
+			postMessage("search finished?")
       break;
     /*case 'stop':
       self.postMessage('WORKER STOPPED: ' + data.msg);

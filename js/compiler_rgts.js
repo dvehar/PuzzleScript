@@ -466,6 +466,7 @@ function levelsToArray(state) {
 	}
 
 	state.levels = processedLevels;
+//	postMessage(state.levels)
 }
 
 var directionaggregates = {
