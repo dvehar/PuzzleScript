@@ -1166,4 +1166,6 @@ var codeMirrorFn = function() {
     };
 };
 
-window.CodeMirror.defineMode('puzzle', codeMirrorFn);
+if(window.CodeMirror) {
+    window.CodeMirror.defineMode('puzzle', codeMirrorFn);
+}
