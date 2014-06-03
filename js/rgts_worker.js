@@ -6,7 +6,7 @@
  
 // Queries
   //  1 * winnable
-var check_query_winnable = true; // is the query on? // TODO change
+var check_query_winnable = false; // is the query on? // TODO change
 var query_winnable = false; // is the query satisfied
   // 2 * winnable_through [1,1,1,0,3,0,1,1]  [1,1,1,0,0,3,1,1] 
 var check_query_winnable_through = false; // is the query on?
@@ -59,6 +59,14 @@ function queryBackup () {
   }
   return ret;
 }
+/*
+function states_equal (s1, s2) {
+  if (s1.length != s2.length) return false;
+  for (var i = 0; i < s1.length; ++i) {
+    if (s1[i] !== s2[i]) return false;
+  }
+  return true;
+}*/
 
 /* pre: the ary should have an entry for all enabled queries. see queryBackup() 
  *      for expected format. This precondition is currently checked but must be
@@ -88,8 +96,6 @@ function queryRestore (ary) {
  * no wait moves so don't search wait moves, there are no action moves so don't
  * search action moves, ... */
 function dls(depth, movesMade, stack) {
-  var i = 100;
-  i = i +1;
   
   // update the query variables
   if (check_query_winnable_through) { //q2
@@ -132,7 +138,7 @@ function dls(depth, movesMade, stack) {
       }
     }
   }
-  
+
   // update the engine for wins and try dumping a trace
   if (winning) {
     logMessage("I won");
@@ -149,13 +155,25 @@ function dls(depth, movesMade, stack) {
     DoUndo(); // revert to before you made the winning move
     return; // don't play past a win
   } else {
+    var ww = 0;
+    for (var i=0; i < level.objects.length; ++i) {
+      if (level.objects[i] === 67) ww++;
+    }
+    if (ww === 4) {
+      logMessage("should have won kettle lvl 1");
+    } else if (stack.length === 4) {
+      logMessage("ww = " + ww); // left down right up
+    }
     outputTrace(stack);
   }
-  logMessage("try")
+  //logMessage("try")
   // search further and update the #5 query (from_state_dont)
   if (depth > 0) {
-    var curr_state = JSON.stringify(level);    
-		logMessage("CS:"+JSON.stringify(level)) 
+    var curr_state = new Int32Array(level.objects.length);
+    for (var i=0; i < level.objects.length; ++i) {
+      curr_state[i] = level.objects[i];
+    }
+		//logMessage("CS:"+JSON.stringify(curr_state));
     var query_state = queryBackup();
     
     // try moving up
@@ -163,11 +181,13 @@ function dls(depth, movesMade, stack) {
     while (againing) {
       processInput(-1);			
     }
-		logMessage("CS2:"+JSON.stringify(level)) 
-    var new_state = JSON.stringify(level);
+    var new_state = level.objects;//JSON.stringify(level);
+    //logMessage("CS2:"+JSON.stringify(new_state));
+    //logMessage("CS===CS2? " + (new_state === curr_state));
     if (new_state === curr_state) {
-   logMessage("nothing happened when moving up.");  
+      logMessage("nothing happened when moving up.");  
     } else {
+      //logMessage("moved up");
       stack.push("up");
       pushInput(0);
 //    logMessage(curr_state);
@@ -188,14 +208,14 @@ function dls(depth, movesMade, stack) {
     while (againing) {
       processInput(-1);			
     }
-    new_state = JSON.stringify(level);
+    new_state = level.objects;//JSON.stringify(level);
     if (new_state === curr_state) {
-   logMessage("nothing happened when moving left.");  
+      logMessage("nothing happened when moving left.");  
     } else {
       stack.push("left");
       pushInput(1);
-      logMessage(curr_state);
-      logMessage(new_state);
+      //logMessage(curr_state);
+      //logMessage(new_state);
       if (check_query_from_state_dont) {
         if (query_from_state_dont_state === curr_state) {
           if (query_from_state_dont_move.indexOf("left") != -1) { // is up not an expected move?
@@ -212,14 +232,14 @@ function dls(depth, movesMade, stack) {
     while (againing) {
       processInput(-1);			
     }
-    new_state = JSON.stringify(level);
+    new_state = level.objects;//JSON.stringify(level);
     if (new_state === curr_state) {
-   logMessage("nothing happened when moving down.");  
+      logMessage("nothing happened when moving down.");  
     } else {
       stack.push("down");
       pushInput(2);
-      logMessage(curr_state);
-      logMessage(new_state);
+      //logMessage(curr_state);
+      //logMessage(new_state);
       if (check_query_from_state_dont) {
         if (query_from_state_dont_state === curr_state) {
           if (query_from_state_dont_move.indexOf("down") != -1) { // is up not an expected move?
@@ -236,14 +256,14 @@ function dls(depth, movesMade, stack) {
     while (againing) {
       processInput(-1);			
     }
-    new_state = JSON.stringify(level);
+    new_state = level.objects;//JSON.stringify(level);
     if (new_state === curr_state) {
-   logMessage("nothing happened when moving right.");  
+      logMessage("nothing happened when moving right.");  
     } else {
       stack.push("right");
       pushInput(3);
-      logMessage(curr_state);
-      logMessage(new_state);
+      //logMessage(curr_state);
+      //logMessage(new_state);
       if (check_query_from_state_dont) {
         if (query_from_state_dont_state === curr_state) {
           if (query_from_state_dont_move.indexOf("right") != -1) { // is up not an expected move?
@@ -260,14 +280,14 @@ function dls(depth, movesMade, stack) {
     while (againing) {
       processInput(-1);			
     }
-    new_state = JSON.stringify(level);
+    new_state = level.objects;//JSON.stringify(level);
     if (new_state === curr_state) {
-//    logMessage("nothing happened when making an action.");  
+      logMessage("nothing happened when making an action.");  
     } else {
       stack.push("action");
       pushInput(4);
-      logMessage(curr_state);
-      logMessage(new_state);
+      //logMessage(curr_state);
+      //logMessage(new_state);
       if (check_query_from_state_dont) {
         if (query_from_state_dont_state === curr_state) {
           if (query_from_state_dont_move.indexOf("action") != -1) { // is up not an expected move?
@@ -296,7 +316,7 @@ function dls(depth, movesMade, stack) {
     }  
   } else if (movesMade) {
     //outputTrace(stack);
-    logMessage(JSON.stringify(level));
+    //logMessage(JSON.stringify(level));
   }
   inputHistory.pop();
   stack.pop();
@@ -363,7 +383,7 @@ function passes_queries() {
 }
 
 // get the the rgts and puzzlescript ready for searching the state space
-function rgts_init (puzzle_src) {
+function rgts_init (puzzle_src, current_level) {
   /* load the scripts needed */
   importScripts('wrapper_rgts.js', 
                 'globalVariables.js', 'debug.js', 'font.js', 'rng.js',
@@ -375,9 +395,9 @@ function rgts_init (puzzle_src) {
   unitTesting=true;
   
   /* compile the source */
-  compile(["loadLevel",1],puzzle_src,null);
-  
-  self.postMessage(JSON.stringify(level)); 
+  compile(["loadLevel", current_level],puzzle_src,null);
+  logMessage(current_level);
+  //self.postMessage(JSON.stringify(level)); 
   
 	while (againing) {
 		againing=false;
@@ -633,12 +653,12 @@ self.addEventListener('message', function(e) {
   var data = e.data;
   switch (data.cmd) {
     case 'start':
-      self.postMessage('WORKER STARTED: ' + data.msg);
+      self.postMessage("WORKER STARTED: " + data.msg);
       for (var i=0; i < 5; ++i) {
         self.postMessage("test message: " + i);
       }
       logMessage("Starting the search");
-      rgts_init(data.msg);
+      rgts_init(data.msg, data.lvl);
       //dls(max_depth,false,[]);
       dls(4,false,[]); // TODO Desmond Change
 			postMessage("search finished?")

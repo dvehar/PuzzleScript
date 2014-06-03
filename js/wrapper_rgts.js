@@ -19,7 +19,7 @@ var inputString;
 var outputString;
 
 function consolePrint(text) {
-	logMessage(text);
+	//logMessage(text);
 }
 function consoleError(text) {
 	logMessage("ERR:"+text);

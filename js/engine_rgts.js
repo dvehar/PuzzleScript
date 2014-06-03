@@ -2405,6 +2405,7 @@ function checkWin() {
 }
 
 function DoWin() {
+  postMessage("In do win");
 	if (winning) {
 		return;
 	}
