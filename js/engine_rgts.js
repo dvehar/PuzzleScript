@@ -2429,7 +2429,7 @@ function checkWin() {
 }
 
 function DoWin() {
-  if (winning) logMessage("we have won");
+  logMessage("we have won");
 	if (winning) {
 		return;
 	}
