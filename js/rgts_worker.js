@@ -6,7 +6,7 @@
  
 // Queries
   //  1 * winnable
-var check_query_winnable = false; // is the query on? // TODO change
+var check_query_winnable = true; // is the query on? // TODO change
 var query_winnable = false; // is the query satisfied
   // 2 * winnable_through [1,1,1,0,3,0,1,1]  [1,1,1,0,0,3,1,1] 
 var check_query_winnable_through = false; // is the query on?
@@ -155,7 +155,7 @@ function dls(depth, movesMade, stack) {
     DoUndo(); // revert to before you made the winning move
     return; // don't play past a win
   } else {
-    var ww = 0;
+    /*var ww = 0;
     for (var i=0; i < level.objects.length; ++i) {
       if (level.objects[i] === 67) ww++;
     }
@@ -163,7 +163,7 @@ function dls(depth, movesMade, stack) {
       logMessage("should have won kettle lvl 1");
     } else if (stack.length === 4) {
       logMessage("ww = " + ww); // left down right up
-    }
+    }*/
     outputTrace(stack);
   }
   //logMessage("try")

@@ -150,10 +150,10 @@ function unloadGame() {
 	level = new Level(0, 5, 5, 2, null);
 	level.objects = new Int32Array(0);
 	generateTitleScreen();
-    if(!unitTesting) {
-        canvasResize();
-        redraw();
-    }
+  if(!unitTesting) {
+    canvasResize();
+    redraw();
+  }
 }
 
 function generateTitleScreen()
@@ -171,23 +171,23 @@ function generateTitleScreen()
 
 	if (titleMode===0) {
 		if (titleSelected) {
-			titleImage = deepClone(titletemplate_firstgo_selected);
+      titleImage = deepClone(titletemplate_firstgo_selected);
 		} else {
 			titleImage = deepClone(titletemplate_firstgo);
 		}
 	} else {
 		if (titleSelection===0) {
 			if (titleSelected) {
-				titleImage = deepClone(titletemplate_select0_selected);
+        titleImage = deepClone(titletemplate_select0_selected);
 			} else {
-				titleImage = deepClone(titletemplate_select0);
-			}
+        titleImage = deepClone(titletemplate_select0);
+      }
 		} else {
 			if (titleSelected) {
-				titleImage = deepClone(titletemplate_select1_selected);
+        titleImage = deepClone(titletemplate_select1_selected);
 			} else {
-				titleImage = deepClone(titletemplate_select1);
-			}
+        titleImage = deepClone(titletemplate_select1);
+      }
 		}
 	}
 
@@ -295,16 +295,14 @@ function deepClone(item) {
 }
 
 function wordwrap( str, width ) {
+  width = width || 75;
+  var cut = true;
 
-    width = width || 75;
-    var cut = true;
+  if (!str) { return str; }
 
-    if (!str) { return str; }
+  var regex = '.{1,' +width+ '}(\\s|$)' + (cut ? '|.{' +width+ '}|.+$' : '|\\S+?(\\s|$)');
 
-    var regex = '.{1,' +width+ '}(\\s|$)' + (cut ? '|.{' +width+ '}|.+$' : '|\\S+?(\\s|$)');
-
-    return str.match( RegExp(regex, 'g') );
-
+  return str.match( RegExp(regex, 'g') );
 }
 
 var splitMessage=[];
@@ -348,7 +346,7 @@ function drawMessageScreen() {
 
 var loadedLevelSeed=0;
 
-function loadLevelFromLevelDat(state,leveldat,randomseed) {	
+function loadLevelFromLevelDat(state,leveldat,randomseed) {
 	if (randomseed==null) {
 		randomseed = (Math.random() + Date.now()).toString();
 	}
@@ -495,11 +493,11 @@ function setGameState(_state, command, randomseed) {
 	timer=0;
 	autotick=0;
 	winning=false;
-    againing=false;
-    quitting=false;
-    messageselected=false;
-    STRIDE_MOV=_state.STRIDE_MOV;
-    STRIDE_OBJ=_state.STRIDE_OBJ;
+  againing=false;
+  quitting=false;
+  messageselected=false;
+  STRIDE_MOV=_state.STRIDE_MOV;
+  STRIDE_OBJ=_state.STRIDE_OBJ;
     
 	if (command===undefined) {
 		command=["restart"];
