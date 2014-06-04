@@ -393,7 +393,7 @@ function rgts_init (puzzle_src, current_level) {
   verbose_logging = true;
   /* set Puzzlescript to unit testing mode */
   unitTesting=true;
-  
+  testsAutoAdvanceLevel = false;
   /* compile the source */
   compile(["loadLevel", current_level],puzzle_src,null);
   logMessage(current_level);

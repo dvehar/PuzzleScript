@@ -374,9 +374,6 @@ function loadLevelFromLevelDat(state,leveldat,randomseed) {
 	    if ('run_rules_on_level_start' in state.metadata) {
 			processInput(-1,true);
 	    }
-		if(!unitTesting) {
-			canvasResize();
-		}
 	} else {
 		tryPlayShowMessageSound();
 		drawMessageScreen();
@@ -434,7 +431,7 @@ generateTitleScreen();
 canvasResize();
 
 function tryPlaySimpleSound(soundname) {
-	if (!unitTesting && state.sfx_Events[soundname]!==undefined) {
+	if (state.sfx_Events[soundname]!==undefined) {
 		var seed = state.sfx_Events[soundname];
 		playSound(seed);
 	}
@@ -479,7 +476,7 @@ var backups=[];
 var restartTarget;
 
 function backupLevel() {
-	var ret = {
+  var ret = {
 		dat : new Int32Array(level.objects),
 		width : level.width,
 		height : level.height
@@ -489,11 +486,11 @@ function backupLevel() {
 
 function setGameState(_state, command, randomseed) {
 	dirty.all = true;
-	oldflickscreendat=[];
+  oldflickscreendat=[];
 	timer=0;
 	autotick=0;
 	winning=false;
-  againing=false;
+	againing=false;
   quitting=false;
   messageselected=false;
   STRIDE_MOV=_state.STRIDE_MOV;
@@ -553,7 +550,6 @@ function setGameState(_state, command, randomseed) {
     	case "restart":
     	{
 		    winning=false;
-            quitting=false;
 		    timer=0;
 		    titleScreen=true;
 		    tryPlayTitleSound();
@@ -580,7 +576,6 @@ function setGameState(_state, command, randomseed) {
 			var targetLevel = command[1];
 			curlevel=i;
 		    winning=false;
-            quitting=false;
 		    timer=0;
 		    titleScreen=false;
 		    textMode=false;
@@ -601,7 +596,6 @@ function setGameState(_state, command, randomseed) {
 				if(level.lineNumber<=targetLine+1) {
 					curlevel=i;
 				    winning=false;
-                    quitting=false;
 				    timer=0;
 				    titleScreen=false;
 				    textMode=false;
@@ -618,11 +612,13 @@ function setGameState(_state, command, randomseed) {
 			break;
 		}
 	}
+	
+	if (canDump===true) {
+		inputHistory=[];
+	}
+    canvasResize();
 
-	clearInputs();
-	dirty.all = true;
-	canvasResize();
-	dirty.all = true;
+
 
 	if (canYoutube) {
 		if ('youtube' in state.metadata) {
@@ -644,7 +640,7 @@ function setGameState(_state, command, randomseed) {
 		if ('youtube' in state.metadata) {
 			var div_container = document.createElement('DIV');
 			var div_front = document.createElement('DIV');
-			div_front.style.zIndex=-100;
+			div_front.style.zIndex=-100;	
 			div_front.style.backgroundColor=state.bgcolor;
 			div_front.style.position= "absolute";
 			div_front.style.width="500px";
@@ -652,10 +648,10 @@ function setGameState(_state, command, randomseed) {
 			var div_back = document.createElement('DIV');
 			div_back.style.zIndex=-200;
 			div_back.style.position= "absolute";
-
+			
 			div_container.appendChild(div_back);
 			div_container.appendChild(div_front);
-
+			
 			var youtubeid=state.metadata['youtube'];
 			var url = "https://youtube.googleapis.com/v/"+youtubeid+"?autoplay=1&loop=1&playlist="+youtubeid;
 			ifrm = document.createElement("IFRAME");
@@ -670,6 +666,7 @@ function setGameState(_state, command, randomseed) {
 			document.body.appendChild(div_container);
 			*/
 	}
+	
 }
 
 function RebuildLevelArrays() {
@@ -749,7 +746,6 @@ function restoreLevel(lev) {
     againing=false;
     messagetext="";
     level.commandQueue=[];
-	dirty.all = true;
 }
 
 var zoomscreen=false;
@@ -777,7 +773,7 @@ function DoRestart(force) {
 	if ('run_rules_on_level_start' in state.metadata) {
     	processInput(-1,true);
 	}
-
+	
 	level.commandQueue=[];
 }
 
@@ -845,38 +841,28 @@ function startMovement(dir) {
 
 var dirMasksDelta = {
      1:[0,-1],//up
-     2:[0,1],//'down'  :
-     4:[-1,0],//'left'  :
-     8:[1,0],//'right' :
-     15:[0,0],//'?' :
-     16:[0,0],//'action' :
+     2:[0,1],//'down'  : 
+     4:[-1,0],//'left'  : 
+     8:[1,0],//'right' : 
+     15:[0,0],//'?' : 
+     16:[0,0],//'action' : 
      3:[0,0]//'no'
 };
 
 var dirMaskName = {
      1:'up',
      2:'down'  ,
-     4:'left'  ,
-     8:'right',
+     4:'left'  , 
+     8:'right',  
      15:'?' ,
      16:'action',
      3:'no'
 };
 
-var dirNameMask = {
-     'up':1,
-     'down':2,
-     'left':4,
-     'right':8,
-     '?':15,
-     'action':16,
-     'no':3
-};
-
 var seedsToPlay_CanMove=[];
 var seedsToPlay_CantMove=[];
 
-function repositionEntitiesOnLayer(positionIndex,layer,dirMask)
+function repositionEntitiesOnLayer(positionIndex,layer,dirMask) 
 {
     var delta = dirMasksDelta[dirMask];
 
@@ -920,8 +906,6 @@ function repositionEntitiesOnLayer(positionIndex,layer,dirMask)
 
     level.setCell(positionIndex, sourceMask);
     level.setCell(targetIndex, targetMask);
-    dirty[positionIndex] = true;
-    dirty[targetIndex] = true;
 
     var colIndex=(targetIndex/level.height)|0;
 	var rowIndex=(targetIndex%level.height);
@@ -1565,7 +1549,7 @@ function matchCellRow(direction, cellRowMatch, cellRow, cellRowMask) {
     		ymin+=(len-1);
     		break;
     	}
-        case 2: //down
+    	case 2: //down 
     	{
 			ymax-=(len-1);
 			break;
@@ -1577,7 +1561,7 @@ function matchCellRow(direction, cellRowMatch, cellRow, cellRowMask) {
     	}
     	case 8: //right
 		{
-			xmax-=(len-1);
+			xmax-=(len-1);	
 			break;
 		}
     	default:
@@ -1614,7 +1598,7 @@ function matchCellRow(direction, cellRowMatch, cellRow, cellRowMask) {
 					result.push(i);
 				}
 			}
-		}
+		}		
 	}
 
 	return result;
@@ -1638,19 +1622,19 @@ function matchCellRowWildCard(direction, cellRowMatch, cellRow,cellRowMask) {
     		ymin+=(len-1);
     		break;
     	}
-		case 2: //down
+    	case 2: //down 
     	{
 			ymax-=(len-1);
 			break;
     	}
     	case 4: //left
     	{
-			xmin+=(len-1);
+    		xmin+=(len-1);
     		break;
     	}
     	case 8: //right
 		{
-			xmax-=(len-1);
+			xmax-=(len-1);	
 			break;
 		}
     	default:
@@ -1702,7 +1686,7 @@ function matchCellRowWildCard(direction, cellRowMatch, cellRow,cellRowMask) {
 				}
 				result.push.apply(result, cellRowMatch(cellRow,i,kmax,0));
 			}
-		}
+		}		
 	}
 
 	return result;
@@ -1800,7 +1784,7 @@ Rule.prototype.applyAt = function(delta,tuple,check) {
         }
     }
     var result=false;
-
+    
     //APPLY THE RULE
     var d0 = delta[0]*level.height;
     var d1 = delta[1];
@@ -1816,9 +1800,8 @@ Rule.prototype.applyAt = function(delta,tuple,check) {
             	currentIndex = (currentIndex+(d1+d0)*k)%level.n_tiles;
             	continue;
             }
-			var rep = preCell.replace(rule, currentIndex);
-			if(rep) { dirty[currentIndex] = true; }
-            result = rep || result;
+
+            result = preCell.replace(rule, currentIndex) || result;
 
             currentIndex = (currentIndex+d1+d0)%level.n_tiles;
         }
@@ -1877,9 +1860,9 @@ Rule.prototype.queueCommands = function() {
 			consolePrint(logString);
 		}
 
-		if (command[0]==='message') {
+		if (command[0]==='message') {			
 			messagetext=command[1];
-		}
+		}		
 	}
 };
 
@@ -1907,13 +1890,13 @@ function applyRandomRuleGroup(ruleGroup) {
 	    		var tuple=tuples[j];
 				matches.push([ruleIndex,tuple]);
 	    	}
-		}
+		}		
 	}
 
 	if (matches.length===0)
 	{
 		return false;
-	}
+	} 
 
 	var match = matches[Math.floor(RandomGen.uniform()*matches.length)];
 	var ruleIndex=match[0];
@@ -1938,7 +1921,7 @@ function applyRuleGroup(ruleGroup) {
     var loopcount=0;
     while(propagated) {
     	loopcount++;
-		if (loopcount>200)
+    	if (loopcount>200) 
     	{
     		logErrorCacheable("Got caught looping lots in a rule group :O",ruleGroup[0].lineNumber,true);
     		break;
@@ -1991,7 +1974,7 @@ function applyRules(rules, loopPoint, startRuleGroupindex){
 					   	logErrorCacheable("got caught in an endless startloop...endloop vortex, escaping!", ruleGroup[0].lineNumber,true);
 					   	break;
 					}
-		        }
+		        } 
         	}
         }
     }
@@ -2155,7 +2138,7 @@ function processInput(dir,dontCheckWin,dontModify) {
         	first=false;
         	rigidloop=false;
         	i++;
-
+        	
         	if (verbose_logging){consolePrint('applying rules');}
 
         	applyRules(state.rules, state.loopPoint, startRuleGroupIndex);	
@@ -2201,8 +2184,8 @@ function processInput(dir,dontCheckWin,dontModify) {
         	//play player cantmove sounds here
         }
 
-	    if (level.commandQueue.indexOf('cancel')>=0) {
-			if (verbose_logging) {
+	    if (level.commandQueue.indexOf('cancel')>=0) {	
+	    	if (verbose_logging) { 
 	    		consolePrint('CANCEL command executed, cancelling turn.');
 			}
     		backups.push(bak);
@@ -2214,8 +2197,8 @@ function processInput(dir,dontCheckWin,dontModify) {
 	    } 
 
 	    if (level.commandQueue.indexOf('restart')>=0) {
-			if (verbose_logging) {
-				consolePrint('RESTART command executed, reverting to restart state.');
+	    	if (verbose_logging) { 
+	    		consolePrint('RESTART command executed, reverting to restart state.');
 			}
     		backups.push(bak);
 	    	DoRestart(true);	
@@ -2250,8 +2233,7 @@ function processInput(dir,dontCheckWin,dontModify) {
 	    	}
 	    }
 
-
-		if (dontModify) {
+		if (dontModify) {		
     		if (verbose_logging) {
     			consoleCacheDump();
     		}
@@ -2284,7 +2266,7 @@ function processInput(dir,dontCheckWin,dontModify) {
 	 		var command = level.commandQueue[i];
 	 		if (command.charAt(1)==='f')  {//identifies sfxN
 	 			tryPlaySimpleSound(command);
-			}
+	 		}  	
 			if (unitTesting===false) {
 				if (command==='message') {
 					showTempMessage();
@@ -2293,7 +2275,7 @@ function processInput(dir,dontCheckWin,dontModify) {
 	    }
 
 	    if (textMode===false && (dontCheckWin===undefined ||dontCheckWin===false)) {
-			if (verbose_logging) {
+	    	if (verbose_logging) { 
 	    		consolePrint('Checking win condition.');
 			}
 	    	checkWin();
@@ -2424,34 +2406,24 @@ function checkWin() {
 
 	if (won) {
 		consolePrint("Win Condition Satisfied");
-		DoWin();
+		DoWin(); 
 	}
 }
 
 function DoWin() {
-  logMessage("we have won");
+  postMessage("In do win");
 	if (winning) {
 		return;
 	}
-    pushInput("win");
-    dumpTrace();
 	againing=false;
 	tryPlayEndLevelSound();
-	if (unitTesting && testsAutoAdvanceLevel) {
+	if (unitTesting  && testsAutoAdvanceLevel) {
 		nextLevel();
 		return;
 	}
 
 	winning=true;
 	timer=0;
-  logMessage("we have won");
-}
-
-function DoQuit() {
-	if(quitting || curlevel==0) { return; }
-	quitting = true;
-	pushInput("quit");
-	dumpTrace();
 }
 
 /*
@@ -2467,7 +2439,6 @@ function anyMovements() {
 
 
 function nextLevel() {
-	dirty.all=true;
 	keybuffer=[];
     againing=false;
 	messagetext="";
@@ -2475,11 +2446,11 @@ function nextLevel() {
 		if (titleSelection===0) {
 			//new game
 			curlevel=0;
-		}
+		} 			
 		loadLevelFromState(state,curlevel);
 	} else {
 		if (curlevel<(state.levels.length-1))
-		{
+		{			
 			curlevel++;
 			textMode=false;
 			titleScreen=false;
@@ -2490,12 +2461,21 @@ function nextLevel() {
 			curlevel=0;
 			goToTitleScreen();
 			tryPlayEndGameSound();
-		}
+		}		
 		//continue existing game
 	}
+	try {
+		if (!!window.localStorage) {
+			localStorage[document.URL]=curlevel;
+		}
+	} catch (ex) {
 
-	canvasResize();
-	clearInputs();
+	}
+
+	canvasResize();	
+	if (canDump===true) {
+		inputHistory=[];
+	}
 }
 
 function goToTitleScreen(){
