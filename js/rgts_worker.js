@@ -151,11 +151,12 @@ function dls(depth, movesMade, stack) {
   } else {
     outputTrace(stack);
   }
-  logMessage("try")
+  // logMessage("try")
   // search further and update the #5 query (from_state_dont)
   if (depth > 0) {
+		logMessage("try");
     var curr_state = JSON.stringify(level);    
-		logMessage("CS:"+JSON.stringify(level)) 
+		//logMessage("CS:"+JSON.stringify(level)) 
     var query_state = queryBackup();
     
     // try moving up
@@ -163,7 +164,7 @@ function dls(depth, movesMade, stack) {
     while (againing) {
       processInput(-1);			
     }
-		logMessage("CS2:"+JSON.stringify(level)) 
+		//logMessage("CS2:"+JSON.stringify(level)) 
     var new_state = JSON.stringify(level);
     if (new_state === curr_state) {
    logMessage("nothing happened when moving up.");  
@@ -194,8 +195,8 @@ function dls(depth, movesMade, stack) {
     } else {
       stack.push("left");
       pushInput(1);
-      logMessage(curr_state);
-      logMessage(new_state);
+      // logMessage(curr_state);
+      // logMessage(new_state);
       if (check_query_from_state_dont) {
         if (query_from_state_dont_state === curr_state) {
           if (query_from_state_dont_move.indexOf("left") != -1) { // is up not an expected move?
@@ -218,8 +219,8 @@ function dls(depth, movesMade, stack) {
     } else {
       stack.push("down");
       pushInput(2);
-      logMessage(curr_state);
-      logMessage(new_state);
+      // logMessage(curr_state);
+      // logMessage(new_state);
       if (check_query_from_state_dont) {
         if (query_from_state_dont_state === curr_state) {
           if (query_from_state_dont_move.indexOf("down") != -1) { // is up not an expected move?
@@ -242,8 +243,8 @@ function dls(depth, movesMade, stack) {
     } else {
       stack.push("right");
       pushInput(3);
-      logMessage(curr_state);
-      logMessage(new_state);
+      // logMessage(curr_state);
+      // logMessage(new_state);
       if (check_query_from_state_dont) {
         if (query_from_state_dont_state === curr_state) {
           if (query_from_state_dont_move.indexOf("right") != -1) { // is up not an expected move?
@@ -266,8 +267,8 @@ function dls(depth, movesMade, stack) {
     } else {
       stack.push("action");
       pushInput(4);
-      logMessage(curr_state);
-      logMessage(new_state);
+      // logMessage(curr_state);
+      // logMessage(new_state);
       if (check_query_from_state_dont) {
         if (query_from_state_dont_state === curr_state) {
           if (query_from_state_dont_move.indexOf("action") != -1) { // is up not an expected move?
@@ -295,8 +296,11 @@ function dls(depth, movesMade, stack) {
       queryRestore(query_state);
     }  
   } else if (movesMade) {
-    //outputTrace(stack);
-    logMessage(JSON.stringify(level));
+		// logMessage("Giving up after:"+JSON.stringify(inputHistory));
+		// logMessage("Winning?"+winning);
+		// logMessage("Stack:"+JSON.stringify(stack));
+    // outputTrace(stack);
+    // logMessage(JSON.stringify(level));
   }
   inputHistory.pop();
   stack.pop();
@@ -322,6 +326,8 @@ function outputTrace (stack) {
 function passes_queries() {
   var result = true;
   
+	logMessage("Winning? "+winning);
+	
   // query 1
   if (result && check_query_winnable) {
     result = query_winnable;
@@ -370,9 +376,10 @@ function rgts_init (puzzle_src) {
                 'riffwave.js', 'sfxr.js', 'codemirror/codemirror_rgts.js', 
                 'codemirror/active-line.js', 'colors.js', 'engine_rgts.js',
                 'parser_rgts.js', 'compiler_rgts.js', 'soundbar.js');
-  verbose_logging = true;
+  // verbose_logging = true;
   /* set Puzzlescript to unit testing mode */
   unitTesting=true;
+	testsAutoAdvanceLevel = false;
   
   /* compile the source */
   compile(["loadLevel",1],puzzle_src,null);

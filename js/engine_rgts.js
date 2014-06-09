@@ -2063,14 +2063,17 @@ function calculateRowColMasks() {
 
 /* returns a bool indicating if anything changed */
 function processInput(dir,dontCheckWin,dontModify) {
+	// verbose_logging = true;
+	// postMessage('MSG: Process input. '+verbose_logging);
+	
 	againing = false;
 
 	if (verbose_logging) { 
 	 	if (dir===-1) {
-	 		consolePrint('Turn starts with no input.')
+	 		logMessage('Turn starts with no input.')
 	 	} else {
-	 		consolePrint('=======================');
-			consolePrint('Turn starts with input of ' + ['up','left','down','right','action'][dir]+'.');
+	 		logMessage('=======================');
+			logMessage('Turn starts with input of ' + ['up','left','down','right','action'][dir]+'.');
 	 	}
 	}
 
@@ -2410,7 +2413,8 @@ function DoWin() {
 	}
 	againing=false;
 	tryPlayEndLevelSound();
-	if (unitTesting) {
+	if (unitTesting && testsAutoAdvanceLevel) {
+		logMessage("NEXT LEVEL");
 		nextLevel();
 		return;
 	}
