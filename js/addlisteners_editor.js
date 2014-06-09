@@ -31,7 +31,7 @@ for (var i=0;i<1;i++) {
               
             }
           }, false);
-          worker.postMessage({'cmd': 'start', 'msg': editor.getValue()}); // send a message telling the worker to start
+          worker.postMessage({'cmd': 'start', 'msg': editor.getValue(), 'lvl':curlevel}); // send a message telling the worker to start
           el.firstChild.attributes[1].nodeValue = "/home/desmond/Gamelan/puzzle/PuzzleScript_new/rgts/images/rgts_stop.gif" 
         // } else {
         //   console.log("stopping the rgts");
