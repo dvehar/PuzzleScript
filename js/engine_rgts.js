@@ -150,15 +150,14 @@ function unloadGame() {
 	level = new Level(0, 5, 5, 2, null);
 	level.objects = new Int32Array(0);
 	generateTitleScreen();
-  if(!unitTesting) {
-    canvasResize();
-    redraw();
-  }
+	canvasResize();
+	redraw();
 }
 
 function generateTitleScreen()
 {
 	titleMode=curlevel>0?1:0;
+	
 	if (state.levels.length===0) {
 		titleImage=intro_template;
 		return;
@@ -171,27 +170,27 @@ function generateTitleScreen()
 
 	if (titleMode===0) {
 		if (titleSelected) {
-      titleImage = deepClone(titletemplate_firstgo_selected);
+			titleImage = deepClone(titletemplate_firstgo_selected);		
 		} else {
-			titleImage = deepClone(titletemplate_firstgo);
+			titleImage = deepClone(titletemplate_firstgo);					
 		}
 	} else {
 		if (titleSelection===0) {
 			if (titleSelected) {
-        titleImage = deepClone(titletemplate_select0_selected);
+				titleImage = deepClone(titletemplate_select0_selected);		
 			} else {
-        titleImage = deepClone(titletemplate_select0);
-      }
+				titleImage = deepClone(titletemplate_select0);					
+			}			
 		} else {
 			if (titleSelected) {
-        titleImage = deepClone(titletemplate_select1_selected);
+				titleImage = deepClone(titletemplate_select1_selected);		
 			} else {
-        titleImage = deepClone(titletemplate_select1);
-      }
+				titleImage = deepClone(titletemplate_select1);					
+			}						
 		}
 	}
 
-	var noAction = 'noaction' in state.metadata;
+	var noAction = 'noaction' in state.metadata;	
 	var noUndo = 'noundo' in state.metadata;
 	var noRestart = 'norestart' in state.metadata;
 	if (noUndo && noRestart) {
@@ -225,7 +224,7 @@ function generateTitleScreen()
 		for (var i=0;i<attributionsplit.length;i++) {
 			var line = attributionsplit[i];
 			var row = titleImage[3+i];
-			titleImage[3+i]=row.slice(0,width-line.length-1)+line+row[row.length-1];
+			titleImage[3+i]=row.slice(0,width-line.length-1)+line+row[row.length-1];			
 		}
 	}
 
@@ -246,7 +245,7 @@ var state = introstate;
 function deepClone(item) {
     if (!item) { return item; } // null, undefined values check
 
-    var types = [ Number, String, Boolean ],
+    var types = [ Number, String, Boolean ], 
         result;
 
     // normalizing primitives if someone did new String('aaa'), or new Number('444');
@@ -259,13 +258,13 @@ function deepClone(item) {
     if (typeof result == "undefined") {
         if (Object.prototype.toString.call( item ) === "[object Array]") {
             result = [];
-            item.forEach(function(child, index, array) {
+            item.forEach(function(child, index, array) { 
                 result[index] = deepClone( child );
             });
         } else if (typeof item == "object") {
             // testing that this is DOM
             if (item.nodeType && typeof item.cloneNode == "function") {
-                var result = item.cloneNode( true );
+                var result = item.cloneNode( true );    
             } else if (!item.prototype) { // check that this is a literal
                 if (item instanceof Date) {
                     result = new Date(item);
@@ -295,14 +294,16 @@ function deepClone(item) {
 }
 
 function wordwrap( str, width ) {
-  width = width || 75;
-  var cut = true;
-
-  if (!str) { return str; }
-
-  var regex = '.{1,' +width+ '}(\\s|$)' + (cut ? '|.{' +width+ '}|.+$' : '|\\S+?(\\s|$)');
-
-  return str.match( RegExp(regex, 'g') );
+ 
+    width = width || 75;
+    var cut = true;
+ 
+    if (!str) { return str; }
+ 
+    var regex = '.{1,' +width+ '}(\\s|$)' + (cut ? '|.{' +width+ '}|.+$' : '|\\S+?(\\s|$)');
+ 
+    return str.match( RegExp(regex, 'g') );
+ 
 }
 
 var splitMessage=[];
@@ -335,18 +336,18 @@ function drawMessageScreen() {
 		var lmargin = ((width-messageLength)/2)|0;
 		var rmargin = width-messageLength-lmargin;
 		var rowtext = titleImage[row];
-		titleImage[row]=rowtext.slice(0,lmargin)+m+rowtext.slice(lmargin+m.length);
+		titleImage[row]=rowtext.slice(0,lmargin)+m+rowtext.slice(lmargin+m.length);		
 	}
 
 	if (quittingMessageScreen) {
 		titleImage[10]=titleImage[9];
-	}
+	}		
 	canvasResize();
 }
 
 var loadedLevelSeed=0;
 
-function loadLevelFromLevelDat(state,leveldat,randomseed) {
+function loadLevelFromLevelDat(state,leveldat,randomseed) {	
 	if (randomseed==null) {
 		randomseed = (Math.random() + Date.now()).toString();
 	}
@@ -379,14 +380,9 @@ function loadLevelFromLevelDat(state,leveldat,randomseed) {
 		drawMessageScreen();
     	canvasResize();
 	}
-	clearInputs();
-	dirty.all = true;
-}
 
-function autoTickGame() {
-	pushInput("tick");
-	if(processInput(-1)) {
-		redraw();
+	if (canDump===true) {
+		inputHistory=[];
 	}
 }
 
@@ -485,16 +481,14 @@ function backupLevel() {
 }
 
 function setGameState(_state, command, randomseed) {
-	dirty.all = true;
-  oldflickscreendat=[];
+	oldflickscreendat=[];
 	timer=0;
 	autotick=0;
 	winning=false;
 	againing=false;
-  quitting=false;
-  messageselected=false;
-  STRIDE_MOV=_state.STRIDE_MOV;
-  STRIDE_OBJ=_state.STRIDE_OBJ;
+    messageselected=false;
+    STRIDE_MOV=_state.STRIDE_MOV;
+    STRIDE_OBJ=_state.STRIDE_OBJ;
     
 	if (command===undefined) {
 		command=["restart"];
@@ -2069,14 +2063,17 @@ function calculateRowColMasks() {
 
 /* returns a bool indicating if anything changed */
 function processInput(dir,dontCheckWin,dontModify) {
+	// verbose_logging = true;
+	// postMessage('MSG: Process input. '+verbose_logging);
+	
 	againing = false;
 
 	if (verbose_logging) { 
 	 	if (dir===-1) {
-	 		consolePrint('Turn starts with no input.')
+	 		logMessage('Turn starts with no input.')
 	 	} else {
-	 		consolePrint('=======================');
-			consolePrint('Turn starts with input of ' + ['up','left','down','right','action'][dir]+'.');
+	 		logMessage('=======================');
+			logMessage('Turn starts with input of ' + ['up','left','down','right','action'][dir]+'.');
 	 	}
 	}
 
@@ -2406,18 +2403,19 @@ function checkWin() {
 
 	if (won) {
 		consolePrint("Win Condition Satisfied");
-		DoWin(); 
+		DoWin();
 	}
 }
 
 function DoWin() {
-  postMessage("In do win");
 	if (winning) {
 		return;
 	}
+  pushInput("win");
 	againing=false;
 	tryPlayEndLevelSound();
-	if (unitTesting  && testsAutoAdvanceLevel) {
+	if (unitTesting && testsAutoAdvanceLevel) {
+		logMessage("NEXT LEVEL");
 		nextLevel();
 		return;
 	}
@@ -2486,5 +2484,4 @@ function goToTitleScreen(){
 	titleSelection=curlevel>0?1:0;
 	generateTitleScreen();
 }
-
 
