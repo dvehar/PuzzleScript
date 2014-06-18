@@ -2413,6 +2413,7 @@ function DoWin() {
 	}
   pushInput("win");
 	againing=false;
+	pushInput("win");
 	tryPlayEndLevelSound();
 	if (unitTesting && testsAutoAdvanceLevel) {
 		logMessage("NEXT LEVEL");

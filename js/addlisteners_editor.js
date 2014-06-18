@@ -31,7 +31,11 @@ for (var i=0;i<1;i++) {
               
             }
           }, false);
+<<<<<<< HEAD
           worker.postMessage({'cmd': 'start', 'msg': editor.getValue(), 'lvl': curlevel}); // send a message telling the worker to start
+=======
+          worker.postMessage({'cmd': 'start', 'msg': editor.getValue(), 'lvl':curlevel}); // send a message telling the worker to start
+>>>>>>> 9feb524230b89c6a1c95808f9123b7a731ebec5f
           el.firstChild.attributes[1].nodeValue = "/home/desmond/Gamelan/puzzle/PuzzleScript_new/rgts/images/rgts_stop.gif" 
         // } else {
         //   console.log("stopping the rgts");

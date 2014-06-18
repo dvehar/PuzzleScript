@@ -783,6 +783,7 @@ function DoRestart(force) {
 
 function DoUndo(force) {
 	if ((!levelEditorOpened)&&('noundo' in state.metadata && force!==true)) {
+		// consolePrint("Can't undo");
 		return;
 	}
 	if (verbose_logging) {
@@ -793,7 +794,9 @@ function DoUndo(force) {
 		restoreLevel(tobackup);
 		backups = backups.splice(0,backups.length-1);
 		tryPlayUndoSound();
-	}
+	}// else {
+		// consolePrint("no backups");
+	//}
 }
 
 function getPlayerPositions() {
